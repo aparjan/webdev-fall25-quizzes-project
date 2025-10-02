@@ -1,104 +1,172 @@
-import Link from "next/link";
-import Image from "next/image";
-export default function Dashboard() {
-    return (
-        <div id="wd-dashboard">
-            <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-            <h2 id="wd-dashboard-published">Published Courses (12)</h2> <hr />
-            <div id="wd-dashboard-courses">
-                <div className="wd-dashboard-course1">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/reactjs.jpg" width={200} height={150} alt="React JS course thumbnail" />
-                        <div>
-                            <h5> CS1234 React JS </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
-                <div className="wd-dashboard-course2">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/aws.jpg" width={200} height={150} alt="AWS course thumbnail" />
-                        <div>
-                            <h5> CS1234 AWS </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
-                <div className="wd-dashboard-course3">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/python.jpg" width={200} height={150} alt="python course thumbnail" />
-                        <div>
-                            <h5> CS1234 python </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
-                <div className="wd-dashboard-course4">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/java.jpg" width={200} height={150} alt="java course thumbnail" />
-                        <div>
-                            <h5> CS1234 java </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
-                <div className="wd-dashboard-course5">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/docker.jpg" width={200} height={150} alt="Docker course thumbnail" />
-                        <div>
-                            <h5> CS1234 Docker </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
-                <div className="wd-dashboard-course6">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/nodejs.jpg" width={200} height={150} alt="node.js course thumbnail" />
-                        <div>
-                            <h5> CS1234 node.js </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
-                <div className="wd-dashboard-course7">
-                    <Link href="/Courses/1234" className="wd-dashboard-course-link">
-                        <Image src="/images/cplus.jpg" width={200} height={150} alt="C++ course thumbnail" />
-                        <div>
-                            <h5> CS1234 C++ </h5>
-                            <p className="wd-dashboard-course-title">
-                                Full Stack software developer
-                            </p>
-                            <button> Go </button>
-                        </div>
-                    </Link>
-                </div>
-                <br />
+"use client";
 
-            </div>
-        </div>
-    );
+import Link from "next/link";
+import { Card, Row, Col, Button } from "react-bootstrap";
+
+export default function Dashboard() {
+  return (
+    <div id="wd-dashboard" className="p-4">
+      <h1 id="wd-dashboard-title">Dashboard</h1>
+      <hr />
+      <h2 id="wd-dashboard-published">Published Courses (12)</h2>
+      <hr />
+      <div id="wd-dashboard-courses">
+        <Row xs={1} md={5} className="g-4">
+          {/* Course 1 - React JS */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/reactjs.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 React JS
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Course 2 - AWS */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/aws.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 AWS
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Course 3 - Python */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/python.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 Python
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Course 4 - Java */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/java.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 Java
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Course 5 - Docker */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/docker.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 Docker
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Course 6 - Node.js */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/nodejs.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 Node.js
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Course 7 - C++ */}
+          <Col className="wd-dashboard-course">
+            <Card className="h-100">
+              <Card.Img 
+                variant="top" 
+                src="/images/cplus.jpg" 
+                style={{ height: "160px", objectFit: "cover" }}
+              />
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="wd-dashboard-course-title">
+                  CS1234 C++
+                </Card.Title>
+                <Card.Text className="wd-dashboard-course-description flex-grow-1">
+                  Full Stack software developer
+                </Card.Text>
+                <Link href="/Kambaz/Courses/1234/Home" className="text-decoration-none">
+                  <Button variant="primary" className="w-100">Go</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
 }

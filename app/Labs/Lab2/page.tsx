@@ -4,10 +4,17 @@ import Zindex from "./Zindex";
 import GridLayout from "./GridLayout";
 import Flex from "./Flex";
 import ReactIconsSampler from "./ReactIcons";
+import BootstrapGrids from "./BootstrapGrids";
+import { Container } from 'react-bootstrap';
+import BootstrapTables from "./BootstrapTables";
+import BootstrapLists from "./BootstrapLists";
+import BootstrapForm from "./BootstrapForm";
+import BootstrapNavigation from "./BootstrapNavigation";
 
 export default function Lab2() {
   return (
-    <div id="wd-lab2">
+    <Container>
+      <div id="wd-lab2">
       <h2>Lab 2 - Cascading Style Sheets</h2>
       <h3>Styling with the STYLE attribute</h3>
       <div id="wd-css-id-selectors"> <h3>ID selectors</h3>
@@ -143,6 +150,12 @@ export default function Lab2() {
       <Flex />
       <br />
       <ReactIconsSampler />
+      <BootstrapGrids />
+      <BootstrapTables />
+      <BootstrapLists />
+      <BootstrapForm />
+      <BootstrapNavigation />
     </div>
+    </Container>
   )
 }
