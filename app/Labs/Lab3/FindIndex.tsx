@@ -8,7 +8,8 @@ export default function FindIndex() {
         <div>
             <h4>FindIndex function</h4>
             fourIndex = {fourIndex}
-            string3Index = {string3Index}
+            string3Index = {string3Index} <br />
+            <br />
         </div>
     );
 }
