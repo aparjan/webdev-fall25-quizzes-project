@@ -9,7 +9,7 @@ export default function MapFunction() {
             <h4>Map Function</h4>
             squares = {squares} <br />
             cubes = {cubes} <br />
-            Todos: <ol> {todos.map((todo) => (<li>{todo}</li>))} </ol>
+            Todos: <ol> {todos.map((todo, index) => (<li key={index}>{todo}</li>))} </ol>
             <hr />
         </div>
     );
