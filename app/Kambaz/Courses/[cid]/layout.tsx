@@ -1,11 +1,18 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, use } from "react";
 import { FaAlignJustify } from "react-icons/fa";
 import CourseNavigation from "./Navigation";
+import Breadcrumb from "./Breadcrumb";
+import { courses } from "../../Database";
 
 export default function CoursesLayout(
-  { children }: Readonly<{ children: ReactNode }>) {
+  { children, params }: Readonly<{ 
+    children: ReactNode;
+    params: Promise<{ cid: string }>;
+  }>) {
+  const { cid } = use(params);
+  const course = courses.find((course) => course._id === cid);
   const [showNav, setShowNav] = useState(false);
 
   return (
@@ -16,8 +23,9 @@ export default function CoursesLayout(
           onClick={() => setShowNav(!showNav)}
           style={{ cursor: "pointer" }}
         /> 
-        Course 1234
+        <Breadcrumb course={course} />
       </h2>
+      <hr />
       <div className="d-flex">
         <div className={`wd-course-nav-wrapper ${showNav ? 'show' : ''}`}>
           <CourseNavigation />

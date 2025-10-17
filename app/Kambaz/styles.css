@@ -47,24 +47,3 @@ body * {
         display: none;
     }
 }
-#wd-signin-screen .wd-signin-container {
-    width: 400px;
-    max-width: 400px;
-    min-width: 400px;
-}
-
-#wd-signin-screen input,
-#wd-signin-screen button {
-    width: 100%;
-    /* Fixed font size that won't shrink */
-    font-size: 16px !important;
-}
-
-/* Prevent Bootstrap responsive behavior for sign-in */
-@media (max-width: 576px) {
-    #wd-signin-screen .wd-signin-container {
-        width: 400px;
-        max-width: 400px;
-        min-width: 400px;
-    }
-}

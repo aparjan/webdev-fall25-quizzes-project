@@ -21,6 +21,7 @@ export default function House() {
             {house.bathrooms}
             <h5>Data</h5>
             <pre>{JSON.stringify(house, null, 2)}</pre> <hr />
+            console.log(house);
         </div>
     );
 }

@@ -1,8 +1,28 @@
 "use client";
 
 import { Button, Form } from "react-bootstrap";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+import assignments from "../../../../Database/assignments.json";
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const assignment = assignments.find((a) => a._id === aid);
+
+  if (!assignment) {
+    return <div className="p-3">Assignment not found</div>;
+  }
+
+  // Helper function to convert date string to YYYY-MM-DD format
+  const formatDateForInput = (dateStr: string) => {
+    // If already in YYYY-MM-DD format, return as is
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      return dateStr;
+    }
+    // Otherwise return a default date
+    return "2024-05-13";
+  };
+
   return (
     <div id="wd-assignments-editor" className="p-3">
       <Form>
@@ -11,7 +31,7 @@ export default function AssignmentEditor() {
           <Form.Control
             type="text"
             id="wd-name"
-            defaultValue="A1 - ENV + HTML"
+            defaultValue={assignment.title}
           />
         </Form.Group>
 
@@ -20,7 +40,7 @@ export default function AssignmentEditor() {
             as="textarea"
             id="wd-description"
             rows={6}
-            defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following: Your full name and section Links to each of the lab assignments Link to the Kanbas application Links to all relevant source code repositories The Kanbas application should include a link to navigate back to the landing page."
+            defaultValue={assignment.description}
           />
         </Form.Group>
 
@@ -32,7 +52,7 @@ export default function AssignmentEditor() {
             <Form.Control
               type="number"
               id="wd-points"
-              defaultValue={100}
+              defaultValue={assignment.points}
             />
           </div>
         </div>
@@ -126,7 +146,7 @@ export default function AssignmentEditor() {
                 type="date"
                 id="wd-due-select"
                 name="due"
-                defaultValue="2024-05-13"
+                defaultValue={formatDateForInput(assignment.dueDate || "")}
                 className="mb-3"
               />
 
@@ -137,7 +157,7 @@ export default function AssignmentEditor() {
                     type="date"
                     id="wd-available-select"
                     name="availableFrom"
-                    defaultValue="2024-05-06"
+                    defaultValue={formatDateForInput(assignment.availableDate || "")}
                   />
                 </div>
                 <div className="col-md-6">
@@ -146,7 +166,7 @@ export default function AssignmentEditor() {
                     type="date"
                     id="wd-available-until"
                     name="availableUntil"
-                    defaultValue="2024-05-20"
+                    defaultValue={formatDateForInput(assignment.availableUntilDate || "")}
                   />
                 </div>
               </div>
@@ -157,21 +177,25 @@ export default function AssignmentEditor() {
         <hr />
 
         <div className="d-flex justify-content-end">
-          <Button
-            variant="secondary"
-            id="wd-button-cancel"
-            className="me-2"
-            type="button"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="danger"
-            id="wd-button-submit"
-            type="submit"
-          >
-            Save
-          </Button>
+          <Link href={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button
+              variant="secondary"
+              id="wd-button-cancel"
+              className="me-2"
+              type="button"
+            >
+              Cancel
+            </Button>
+          </Link>
+          <Link href={`/Kambaz/Courses/${cid}/Assignments`}>
+            <Button
+              variant="danger"
+              id="wd-button-submit"
+              type="button"
+            >
+              Save
+            </Button>
+          </Link>
         </div>
       </Form>
     </div>

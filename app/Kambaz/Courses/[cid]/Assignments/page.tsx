@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { BsGripVertical, BsPlus } from "react-icons/bs";
 import { IoEllipsisVertical, IoSearchSharp } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdAssignment } from "react-icons/md";
 import { Button } from "react-bootstrap";
+import assignments from "../../../Database/assignments.json";
 
 export default function Assignments() {
+  const { cid } = useParams();
+
   return (
     <div id="wd-assignments" className="p-3">
       {/* Search and Action Buttons */}
@@ -47,72 +51,33 @@ export default function Assignments() {
           </div>
         </li>
 
-        {/* Assignment Items */}
-        <li className="list-group-item p-3">
-          <div className="d-flex align-items-start">
-            <BsGripVertical className="me-2 fs-3" />
-            <MdAssignment className="me-3 fs-3 text-success" />
-            <div className="flex-grow-1">
-              <Link
-                href="/Kambaz/Courses/1234/Assignments/123"
-                className="wd-assignment-link text-decoration-none text-dark fw-bold"
-              >
-                A1
-              </Link>
-              <div className="text-muted small">
-                <span className="text-danger">Multiple Modules</span> | Not available until May 6 at 12:00am |
-                <br />
-                Due May 13 at 11:59pm | 100 pts
+        {/* Assignment Items - Dynamic */}
+        {assignments
+          .filter((assignment) => assignment.course === cid)
+          .map((assignment) => (
+            <li key={assignment._id} className="list-group-item p-3">
+              <div className="d-flex align-items-start">
+                <BsGripVertical className="me-2 fs-3" />
+                <MdAssignment className="me-3 fs-3 text-success" />
+                <div className="flex-grow-1">
+                  <Link
+                    href={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
+                    className="wd-assignment-link text-decoration-none text-dark fw-bold"
+                  >
+                    {assignment.title}
+                  </Link>
+                  <div className="text-muted small">
+                    <span className="text-danger">Multiple Modules</span> | 
+                    Not available until {assignment.availableDate} |
+                    <br />
+                    Due {assignment.dueDate} | {assignment.points} pts
+                  </div>
+                </div>
+                <FaCheckCircle className="text-success me-2 fs-5" />
+                <IoEllipsisVertical className="fs-4" />
               </div>
-            </div>
-            <FaCheckCircle className="text-success me-2 fs-5" />
-            <IoEllipsisVertical className="fs-4" />
-          </div>
-        </li>
-
-        <li className="list-group-item p-3">
-          <div className="d-flex align-items-start">
-            <BsGripVertical className="me-2 fs-3" />
-            <MdAssignment className="me-3 fs-3 text-success" />
-            <div className="flex-grow-1">
-              <Link
-                href="/Kambaz/Courses/1234/Assignments/A2"
-                className="wd-assignment-link text-decoration-none text-dark fw-bold"
-              >
-                A2
-              </Link>
-              <div className="text-muted small">
-                <span className="text-danger">Multiple Modules</span> | Not available until May 13 at 12:00am |
-                <br />
-                Due May 20 at 11:59pm | 100 pts
-              </div>
-            </div>
-            <FaCheckCircle className="text-success me-2 fs-5" />
-            <IoEllipsisVertical className="fs-4" />
-          </div>
-        </li>
-
-        <li className="list-group-item p-3">
-          <div className="d-flex align-items-start">
-            <BsGripVertical className="me-2 fs-3" />
-            <MdAssignment className="me-3 fs-3 text-success" />
-            <div className="flex-grow-1">
-              <Link
-                href="/Kambaz/Courses/1234/Assignments/A3"
-                className="wd-assignment-link text-decoration-none text-dark fw-bold"
-              >
-                A3
-              </Link>
-              <div className="text-muted small">
-                <span className="text-danger">Multiple Modules</span> | Not available until May 20 at 12:00am |
-                <br />
-                Due May 27 at 11:59pm | 100 pts
-              </div>
-            </div>
-            <FaCheckCircle className="text-success me-2 fs-5" />
-            <IoEllipsisVertical className="fs-4" />
-          </div>
-        </li>
+            </li>
+          ))}
       </ul>
     </div>
   );
