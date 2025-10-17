@@ -33,7 +33,7 @@ export default function Lab3() {
   return (
     <div id="wd-lab3">
       <h3>Lab 3</h3> 
-      console.log('Hello World!');
+      console.log(&apos;Hello World!&apos;);
       <VariablesAndConstants />
       <VariableTypes />
       <BooleanVariables />

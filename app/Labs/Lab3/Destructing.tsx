@@ -10,12 +10,12 @@ export default function Destructing() {
             <h2>Destructing</h2>
             <h3>Object Destructing</h3>
             const &#123; name, age &#125; = &#123;
-            name: 'John', age: 25 &#125;
+            name: &apos;John&apos;, age: 25 &#125;
             <br /><br />
             name = {name}<br />
             age = {age}
             <h3>Array Destructing</h3>
-            const [first, second, third] = ['one','two','three']
+            const [first, second, third] = [&apos;one&apos;,&apos;two&apos;,&apos;three&apos;]
             <br /><br />
             first = {first}<br />
             second = {second}<br />
