@@ -11,9 +11,25 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { FaCaretDown, FaCaretRight } from "react-icons/fa";
 import LessonControlButtons from "./LessonControlButton";
 
+// Define types
+interface Lesson {
+  _id: string;
+  name: string;
+  description?: string;
+  module: string;
+}
+
+interface Module {
+  _id: string;
+  name: string;
+  description?: string;
+  course: string;
+  lessons?: Lesson[];
+}
+
 export default function Modules() {
   const { cid } = useParams();
-  const modules = db.modules;
+  const modules = db.modules as Module[];
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({});
 
   const toggleSection = (sectionId: string) => {
@@ -30,8 +46,8 @@ export default function Modules() {
       
       <ul id="wd-modules" className="list-group rounded-0">
         {modules
-          .filter((module: any) => module.course === cid)
-          .map((module: any) => (
+          .filter((module: Module) => module.course === cid)
+          .map((module: Module) => (
             <li key={module._id} className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
               <div className="wd-title p-3 ps-2 bg-secondary">
                 <BsGripVertical className="me-2 fs-3" />
@@ -44,7 +60,7 @@ export default function Modules() {
               
               {module.lessons && (
                 <ul className="wd-lessons list-group rounded-0">
-                  {module.lessons.map((lesson: any) => (
+                  {module.lessons.map((lesson: Lesson) => (
                     <li key={lesson._id} className="wd-lesson list-group-item p-3 ps-1">
                       <BsGripVertical className="me-2 fs-3" />
                       {lesson.name}
