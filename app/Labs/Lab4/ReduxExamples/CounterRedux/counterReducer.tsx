@@ -14,7 +14,7 @@ const counterSlice = createSlice({
 });
 
 export const { increment, decrement } = counterSlice.actions;
-export default counterSlice.reducer;
+export default counterSlice.reducer; 
 
 // Define the state type
 interface RootState {
@@ -23,7 +23,7 @@ interface RootState {
     };
 }
 
-// Component in the same file
+// Component (named export)
 export function CounterRedux() {
     const { count } = useSelector((state: RootState) => state.counterReducer);
     const dispatch = useDispatch();
