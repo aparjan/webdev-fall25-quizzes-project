@@ -3,7 +3,7 @@
 import { Provider } from "react-redux";
 import HelloRedux from "./HelloRedux/helloRedux";
 import store from "../../store";
-import { CounterRedux } from "./CounterRedux/counterReducer";
+import CounterRedux from "./CounterRedux";
 
 export default function ReduxExamples() {
     return (
