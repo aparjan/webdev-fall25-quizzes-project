@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import TOC from "./TOC";
-import StoreProvider from "../Labs/store/Provider";
+import StoreProvider from "./store/Provider";
 
 export default function LabsLayout({
   children,
