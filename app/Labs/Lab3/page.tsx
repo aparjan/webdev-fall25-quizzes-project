@@ -1,3 +1,5 @@
+'use client'
+import { useSelector } from "react-redux";
 import Add from "./Add";
 import AddingAndRemovingToFromArrays from "./AddingAndRemovingToFromArrays";
 import ArrayIndexAndLength from "./ArrayIndexAndLength";
@@ -26,10 +28,13 @@ import Square from "./Square";
 import Styles from "./Styles";
 import TemplateLiterals from "./TemplateLiterals";
 import TernaryOperator from "./TernaryOperator";
-import TodoList from "./todos/TodoList";
+import TodoItem from "./todos/TodoItem";
 import VariablesAndConstants from "./VariablesAndConstants";
 import VariableTypes from "./VariableTypes";
+
 export default function Lab3() {
+  const { todos } = useSelector((state: any) => state.todosReducer);
+  
   return (
     <div id="wd-lab3">
       <h3>Lab 3</h3> 
@@ -64,9 +69,19 @@ export default function Lab3() {
       <h4>Square of 4</h4>
       <Square>4</Square>
       <hr />
-      <Highlight> Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates. </Highlight>
+      <Highlight>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
+      </Highlight>
       <PathParameters />
-      <TodoList />
+      <h2>Lab 3</h2>
+      <ul className="list-group">
+        {todos.map((todo: any) => (
+          <li className="list-group-item" key={todo.id}>
+            {todo.title}
+          </li>
+        ))}
+      </ul>
+      <hr />
     </div>
   );
 }
