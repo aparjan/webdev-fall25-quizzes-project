@@ -1,27 +1,65 @@
 "use client";
 
 import { Button, Form } from "react-bootstrap";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { addAssignment, updateAssignment } from "../../../reducer";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import assignments from "../../../../Database/assignments.json";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignment = assignments.find((a) => a._id === aid);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector((state: any) => state.coursesReducer);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  
+  const existingAssignment = assignments.find((a: any) => a._id === aid);
+  const isNewAssignment = aid === "new";
+  const isFaculty = currentUser?.role === "FACULTY";
 
-  if (!assignment) {
-    return <div className="p-3">Assignment not found</div>;
-  }
+  const [assignment, setAssignment] = useState({
+    _id: "",
+    title: "",
+    course: cid,
+    description: "",
+    points: 100,
+    dueDate: "May 13 at 11:59pm",
+    availableDate: "May 6 at 12:00am",
+    availableUntilDate: "May 20 at 11:59pm",
+  });
 
-  // Helper function to convert date string to YYYY-MM-DD format
-  const formatDateForInput = (dateStr: string) => {
-    // If already in YYYY-MM-DD format, return as is
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-      return dateStr;
+  useEffect(() => {
+    if (existingAssignment && !isNewAssignment) {
+      setAssignment(existingAssignment);
     }
-    // Otherwise return a default date
-    return "2024-05-13";
+  }, [existingAssignment, isNewAssignment]);
+
+  const handleSave = () => {
+    if (isNewAssignment) {
+      dispatch(addAssignment(assignment));
+    } else {
+      dispatch(updateAssignment(assignment));
+    }
+    router.push(`/Kambaz/Courses/${cid}/Assignments`);
   };
+
+  // If not faculty, show read-only view
+  if (!isFaculty) {
+    return (
+      <div id="wd-assignments-editor" className="p-3">
+        <h3>{existingAssignment?.title || "Assignment"}</h3>
+        <p>{existingAssignment?.description}</p>
+        <p><strong>Points:</strong> {existingAssignment?.points}</p>
+        <p><strong>Due:</strong> {existingAssignment?.dueDate}</p>
+        <p><strong>Available:</strong> {existingAssignment?.availableDate}</p>
+        <p><strong>Until:</strong> {existingAssignment?.availableUntilDate}</p>
+        <Link href={`/Kambaz/Courses/${cid}/Assignments`}>
+          <Button variant="secondary">Back to Assignments</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div id="wd-assignments-editor" className="p-3">
@@ -31,7 +69,8 @@ export default function AssignmentEditor() {
           <Form.Control
             type="text"
             id="wd-name"
-            defaultValue={assignment.title}
+            value={assignment.title}
+            onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
           />
         </Form.Group>
 
@@ -40,7 +79,8 @@ export default function AssignmentEditor() {
             as="textarea"
             id="wd-description"
             rows={6}
-            defaultValue={assignment.description}
+            value={assignment.description}
+            onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
           />
         </Form.Group>
 
@@ -52,7 +92,8 @@ export default function AssignmentEditor() {
             <Form.Control
               type="number"
               id="wd-points"
-              defaultValue={assignment.points}
+              value={assignment.points}
+              onChange={(e) => setAssignment({ ...assignment, points: parseInt(e.target.value) })}
             />
           </div>
         </div>
@@ -143,30 +184,36 @@ export default function AssignmentEditor() {
 
               <Form.Label className="fw-bold">Due</Form.Label>
               <Form.Control
-                type="date"
+                type="text"
                 id="wd-due-select"
                 name="due"
-                defaultValue={formatDateForInput(assignment.dueDate || "")}
+                value={assignment.dueDate}
+                onChange={(e) => setAssignment({ ...assignment, dueDate: e.target.value })}
                 className="mb-3"
+                placeholder="May 13 at 11:59pm"
               />
 
               <div className="row">
                 <div className="col-md-6">
                   <Form.Label className="fw-bold">Available from</Form.Label>
                   <Form.Control
-                    type="date"
+                    type="text"
                     id="wd-available-select"
                     name="availableFrom"
-                    defaultValue={formatDateForInput(assignment.availableDate || "")}
+                    value={assignment.availableDate}
+                    onChange={(e) => setAssignment({ ...assignment, availableDate: e.target.value })}
+                    placeholder="May 6 at 12:00am"
                   />
                 </div>
                 <div className="col-md-6">
                   <Form.Label className="fw-bold">Until</Form.Label>
                   <Form.Control
-                    type="date"
+                    type="text"
                     id="wd-available-until"
                     name="availableUntil"
-                    defaultValue={formatDateForInput(assignment.availableUntilDate || "")}
+                    value={assignment.availableUntilDate}
+                    onChange={(e) => setAssignment({ ...assignment, availableUntilDate: e.target.value })}
+                    placeholder="May 20 at 11:59pm"
                   />
                 </div>
               </div>
@@ -187,15 +234,14 @@ export default function AssignmentEditor() {
               Cancel
             </Button>
           </Link>
-          <Link href={`/Kambaz/Courses/${cid}/Assignments`}>
-            <Button
-              variant="danger"
-              id="wd-button-submit"
-              type="button"
-            >
-              Save
-            </Button>
-          </Link>
+          <Button
+            variant="danger"
+            id="wd-button-submit"
+            type="button"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
         </div>
       </Form>
     </div>
