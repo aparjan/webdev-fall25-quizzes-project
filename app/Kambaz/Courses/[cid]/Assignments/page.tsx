@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteAssignment } from "../../reducer";
+import { setAssignments, deleteAssignment as deleteFromStore } from "../../../Courses/reducer";
+import * as assignmentsClient from "./client";
 import { BsGripVertical, BsPlus } from "react-icons/bs";
 import { IoEllipsisVertical, IoSearchSharp } from "react-icons/io5";
 import { FaCheckCircle, FaTrash } from "react-icons/fa";
@@ -17,6 +19,31 @@ export default function Assignments() {
   const dispatch = useDispatch();
 
   const isFaculty = currentUser?.role === "FACULTY";
+
+  const fetchAssignments = async () => {
+    if (!cid) return;
+    try {
+      const assignments = await assignmentsClient.findAssignmentsForCourse(cid as string);
+      dispatch(setAssignments(assignments));
+    } catch (error) {
+      console.error("Error fetching assignments:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
+
+  const handleDelete = async (assignmentId: string) => {
+    if (window.confirm("Are you sure you want to delete this assignment?")) {
+      try {
+        await assignmentsClient.deleteAssignment(assignmentId);
+        dispatch(deleteFromStore(assignmentId));
+      } catch (error) {
+        console.error("Error deleting assignment:", error);
+      }
+    }
+  };
 
   const filteredAssignments = assignments.filter(
     (assignment: any) => assignment.course === cid
@@ -93,11 +120,7 @@ export default function Assignments() {
                 <FaTrash
                   className="text-danger me-2 fs-5"
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this assignment?")) {
-                      dispatch(deleteAssignment(assignment._id));
-                    }
-                  }}
+                  onClick={() => handleDelete(assignment._id)}
                 />
               )}
               <FaCheckCircle className="text-success me-2 fs-5" />

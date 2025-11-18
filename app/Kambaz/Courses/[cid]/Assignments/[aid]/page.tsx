@@ -3,7 +3,8 @@
 import { Button, Form } from "react-bootstrap";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { addAssignment, updateAssignment } from "../../../reducer";
+import { setAssignments, addAssignment as addToStore, updateAssignment as updateInStore } from "../../../reducer";
+import * as assignmentsClient from "../client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -35,13 +36,19 @@ export default function AssignmentEditor() {
     }
   }, [existingAssignment, isNewAssignment]);
 
-  const handleSave = () => {
-    if (isNewAssignment) {
-      dispatch(addAssignment(assignment));
-    } else {
-      dispatch(updateAssignment(assignment));
+  const handleSave = async () => {
+    try {
+      if (isNewAssignment) {
+        const newAssignment = await assignmentsClient.createAssignmentForCourse(cid as string, assignment);
+        dispatch(addToStore(newAssignment));
+      } else {
+        const updatedAssignment = await assignmentsClient.updateAssignment(assignment);
+        dispatch(updateInStore(updatedAssignment));
+      }
+      router.push(`/Kambaz/Courses/${cid}/Assignments`);
+    } catch (error) {
+      console.error("Error saving assignment:", error);
     }
-    router.push(`/Kambaz/Courses/${cid}/Assignments`);
   };
 
   // If not faculty, show read-only view

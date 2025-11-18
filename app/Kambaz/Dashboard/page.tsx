@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewCourse, deleteCourse, updateCourse } from "../Courses/reducer";
+import { setCourses, deleteCourse as deleteFromStore, updateCourse as updateInStore } from "../Courses/reducer";
 import { enrollCourse, unenrollCourse } from "./reducer";
+import * as userClient from "../Account/client";
+import * as courseClient from "../Courses/client";
+import * as enrollmentClient from "./client";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -28,17 +31,40 @@ export default function Dashboard() {
     description: "New Description"
   });
 
-  const addCourse = () => {
-    dispatch(addNewCourse(course));
-    setCourse({
-      _id: "0",
-      name: "New Course",
-      number: "New Number",
-      startDate: "2023-09-10",
-      endDate: "2023-12-15",
-      image: "/images/reactjs.jpg",
-      description: "New Description"
-    });
+  const addCourse = async () => {
+    try {
+      const newCourse = await userClient.createCourse(course);
+      dispatch(setCourses([...courses, newCourse]));
+      setCourse({
+        _id: "0",
+        name: "New Course",
+        number: "New Number",
+        startDate: "2023-09-10",
+        endDate: "2023-12-15",
+        image: "/images/reactjs.jpg",
+        description: "New Description"
+      });
+    } catch (error) {
+      console.error("Error creating course:", error);
+    }
+  };
+
+  const deleteCourse = async (courseId: string) => {
+    try {
+      await courseClient.deleteCourse(courseId);
+      dispatch(deleteFromStore(courseId));
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
+  };
+
+  const updateCourse = async () => {
+    try {
+      await courseClient.updateCourse(course);
+      dispatch(updateInStore(course));
+    } catch (error) {
+      console.error("Error updating course:", error);
+    }
   };
 
   const isEnrolled = (courseId: string) => {
@@ -48,15 +74,23 @@ export default function Dashboard() {
     );
   };
 
-  const handleEnroll = (courseId: string) => {
-    if (currentUser) {
-      dispatch(enrollCourse({ user: currentUser._id, course: courseId }));
+  const handleEnroll = async (courseId: string) => {
+    if (!currentUser) return;
+    try {
+      const enrollment = await enrollmentClient.enrollInCourse(courseId);
+      dispatch(enrollCourse(enrollment));
+    } catch (error) {
+      console.error("Error enrolling:", error);
     }
   };
 
-  const handleUnenroll = (courseId: string) => {
-    if (currentUser) {
+  const handleUnenroll = async (courseId: string) => {
+    if (!currentUser) return;
+    try {
+      await enrollmentClient.unenrollFromCourse(courseId);
       dispatch(unenrollCourse({ user: currentUser._id, course: courseId }));
+    } catch (error) {
+      console.error("Error unenrolling:", error);
     }
   };
 
@@ -85,7 +119,7 @@ export default function Dashboard() {
             <button 
               className="btn btn-warning float-end ms-2" 
               id="wd-update-course-click"
-              onClick={() => dispatch(updateCourse(course))}>
+              onClick={updateCourse}>
               Update
             </button>
             <button 
@@ -169,7 +203,7 @@ export default function Dashboard() {
                           <button 
                             onClick={(event) => {
                               event.preventDefault();
-                              dispatch(deleteCourse(course._id));
+                              deleteCourse(course._id);
                             }} 
                             className="btn btn-danger"
                             id="wd-delete-course-click">

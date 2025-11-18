@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 import { Form, Button } from "react-bootstrap";
-import Link from "next/link";
+import * as client from "../client";
 
 export default function Profile() {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [profile, setProfile] = useState<any>({});
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   useEffect(() => {
     if (!currentUser) {
@@ -21,7 +21,13 @@ export default function Profile() {
     }
   }, [currentUser, router]);
 
-  const signout = () => {
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
+
+  const signout = async () => {
+    await client.signout();
     dispatch(setCurrentUser(null));
     router.push("/Kambaz/Account/Signin");
   };
@@ -35,13 +41,13 @@ export default function Profile() {
       <div className="wd-profile-container" style={{ width: "300px" }}>
         <h3 className="mb-3">Profile</h3>
         {profile && (
-          <Form>
+          <div>
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
                 id="wd-username"
                 className="mb-2"
-                defaultValue={profile.username}
+                value={profile.username || ""}
                 onChange={(e) => setProfile({ ...profile, username: e.target.value })}
                 placeholder="username"
               />
@@ -52,7 +58,7 @@ export default function Profile() {
                 type="password"
                 id="wd-password"
                 className="mb-2"
-                defaultValue={profile.password}
+                value={profile.password || ""}
                 onChange={(e) => setProfile({ ...profile, password: e.target.value })}
                 placeholder="password"
               />
@@ -63,7 +69,7 @@ export default function Profile() {
                 type="text"
                 id="wd-firstname"
                 className="mb-2"
-                defaultValue={profile.firstName}
+                value={profile.firstName || ""}
                 onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
                 placeholder="First Name"
               />
@@ -74,7 +80,7 @@ export default function Profile() {
                 type="text"
                 id="wd-lastname"
                 className="mb-2"
-                defaultValue={profile.lastName}
+                value={profile.lastName || ""}
                 onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
                 placeholder="Last Name"
               />
@@ -85,7 +91,7 @@ export default function Profile() {
                 type="date"
                 id="wd-dob"
                 className="mb-2"
-                defaultValue={profile.dob}
+                value={profile.dob || ""}
                 onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
               />
             </Form.Group>
@@ -95,7 +101,7 @@ export default function Profile() {
                 type="email"
                 id="wd-email"
                 className="mb-2"
-                defaultValue={profile.email}
+                value={profile.email || ""}
                 onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                 placeholder="email"
               />
@@ -105,7 +111,7 @@ export default function Profile() {
               <Form.Select 
                 id="wd-role" 
                 className="mb-2" 
-                defaultValue={profile.role}
+                value={profile.role || "USER"}
                 onChange={(e) => setProfile({ ...profile, role: e.target.value })}
               >
                 <option value="USER">User</option>
@@ -116,14 +122,19 @@ export default function Profile() {
             </Form.Group>
 
             <Button
+              onClick={updateProfile}
+              className="btn btn-primary w-100 mb-2"
+            >
+              Update
+            </Button>
+
+            <Button
               onClick={signout}
-              variant="danger"
-              className="w-100 mb-2"
-              id="wd-signout-btn"
+              className="wd-signout-btn btn btn-danger w-100"
             >
               Sign out
             </Button>
-          </Form>
+          </div>
         )}
       </div>
     </div>
