@@ -1,0 +1,227 @@
+[
+  {
+    "_id": "Q101",
+    "title": "Q1 - Propulsion Basics",
+    "course": "RS101",
+    "description": "Test your understanding of basic rocket propulsion principles",
+    "quizType": "Graded Quiz",
+    "points": 29,
+    "assignmentGroup": "QUIZZES",
+    "shuffleAnswers": true,
+    "timeLimit": 20,
+    "multipleAttempts": false,
+    "showCorrectAnswers": true,
+    "accessCode": "",
+    "oneQuestionAtATime": true,
+    "webcamRequired": false,
+    "lockQuestionsAfterAnswering": false,
+    "dueDate": "2024-09-24",
+    "availableDate": "2024-09-17",
+    "availableUntilDate": "2024-09-24",
+    "published": true,
+    "questions": [
+      {
+        "_id": "Q101-Q1",
+        "type": "multiple-choice",
+        "question": "What is the primary principle behind rocket propulsion?",
+        "points": 3,
+        "choices": [
+          "Newton's First Law",
+          "Newton's Second Law", 
+          "Newton's Third Law",
+          "Law of Conservation of Energy"
+        ],
+        "correctAnswer": "Newton's Third Law"
+      },
+      {
+        "_id": "Q101-Q2",
+        "type": "multiple-choice",
+        "question": "Which component is responsible for generating thrust in a rocket engine?",
+        "points": 3,
+        "choices": [
+          "Combustion Chamber",
+          "Fuel Tank",
+          "Nozzle",
+          "Guidance System"
+        ],
+        "correctAnswer": "Nozzle"
+      },
+      {
+        "_id": "Q101-Q3",
+        "type": "true-false",
+        "question": "Rockets can work in the vacuum of space.",
+        "points": 2,
+        "choices": ["True", "False"],
+        "correctAnswer": "True"
+      }
+    ]
+  },
+  {
+    "_id": "Q102",
+    "title": "Q2 - Combustion Analysis",
+    "course": "RS101",
+    "description": "Quiz on combustion processes in rocket engines",
+    "quizType": "Graded Quiz",
+    "points": 23,
+    "assignmentGroup": "QUIZZES",
+    "shuffleAnswers": true,
+    "timeLimit": 20,
+    "multipleAttempts": false,
+    "showCorrectAnswers": false,
+    "accessCode": "",
+    "oneQuestionAtATime": true,
+    "webcamRequired": false,
+    "lockQuestionsAfterAnswering": false,
+    "dueDate": "2024-10-01",
+    "availableDate": "2024-09-24",
+    "availableUntilDate": "2024-10-01",
+    "published": false,
+    "questions": [
+      {
+        "_id": "Q102-Q1",
+        "type": "multiple-choice",
+        "question": "What is the ideal fuel-to-oxidizer ratio for maximum efficiency?",
+        "points": 4,
+        "choices": [
+          "Stoichiometric ratio",
+          "Rich mixture",
+          "Lean mixture",
+          "None of the above"
+        ],
+        "correctAnswer": "Stoichiometric ratio"
+      },
+      {
+        "_id": "Q102-Q2",
+        "type": "fill-in-blank",
+        "question": "The chemical reaction in a rocket engine is _____.",
+        "points": 3,
+        "choices": [],
+        "correctAnswer": "exothermic"
+      }
+    ]
+  },
+  {
+    "_id": "Q103",
+    "title": "Q3 - Nozzle Design",
+    "course": "RS101",
+    "description": "Test on rocket nozzle design principles",
+    "quizType": "Graded Quiz",
+    "points": 32,
+    "assignmentGroup": "QUIZZES",
+    "shuffleAnswers": true,
+    "timeLimit": 25,
+    "multipleAttempts": true,
+    "showCorrectAnswers": true,
+    "accessCode": "",
+    "oneQuestionAtATime": false,
+    "webcamRequired": false,
+    "lockQuestionsAfterAnswering": false,
+    "dueDate": "2024-10-08",
+    "availableDate": "2024-10-01",
+    "availableUntilDate": "2024-10-08",
+    "published": true,
+    "questions": [
+      {
+        "_id": "Q103-Q1",
+        "type": "multiple-choice",
+        "question": "What type of nozzle is most commonly used in rocket engines?",
+        "points": 5,
+        "choices": [
+          "Convergent nozzle",
+          "Divergent nozzle",
+          "Convergent-Divergent nozzle",
+          "Straight nozzle"
+        ],
+        "correctAnswer": "Convergent-Divergent nozzle"
+      },
+      {
+        "_id": "Q103-Q2",
+        "type": "true-false",
+        "question": "A larger nozzle exit area always produces more thrust.",
+        "points": 3,
+        "choices": ["True", "False"],
+        "correctAnswer": "False"
+      }
+    ]
+  },
+  {
+    "_id": "Q104",
+    "title": "Q4 - Aerodynamics Midterm",
+    "course": "RS102",
+    "description": "Comprehensive quiz on aerodynamic principles",
+    "quizType": "Graded Quiz",
+    "points": 17,
+    "assignmentGroup": "EXAMS",
+    "shuffleAnswers": true,
+    "timeLimit": 30,
+    "multipleAttempts": false,
+    "showCorrectAnswers": false,
+    "accessCode": "AERO2024",
+    "oneQuestionAtATime": true,
+    "webcamRequired": true,
+    "lockQuestionsAfterAnswering": true,
+    "dueDate": "2024-10-15",
+    "availableDate": "2024-10-08",
+    "availableUntilDate": "2024-10-15",
+    "published": false,
+    "questions": [
+      {
+        "_id": "Q104-Q1",
+        "type": "multiple-choice",
+        "question": "What does Bernoulli's principle describe?",
+        "points": 6,
+        "choices": [
+          "Pressure and velocity relationship in fluid flow",
+          "Turbulent flow patterns",
+          "Boundary layer separation",
+          "Shock wave formation"
+        ],
+        "correctAnswer": "Pressure and velocity relationship in fluid flow"
+      }
+    ]
+  },
+  {
+    "_id": "Q105",
+    "title": "Q5 - Spacecraft Systems",
+    "course": "RS103",
+    "description": "Quiz on spacecraft design and systems engineering",
+    "quizType": "Practice Quiz",
+    "points": 31,
+    "assignmentGroup": "QUIZZES",
+    "shuffleAnswers": false,
+    "timeLimit": 20,
+    "multipleAttempts": true,
+    "showCorrectAnswers": true,
+    "accessCode": "",
+    "oneQuestionAtATime": false,
+    "webcamRequired": false,
+    "lockQuestionsAfterAnswering": false,
+    "dueDate": "2024-10-22",
+    "availableDate": "2024-10-15",
+    "availableUntilDate": "2024-10-22",
+    "published": true,
+    "questions": [
+      {
+        "_id": "Q105-Q1",
+        "type": "multiple-choice",
+        "question": "Which subsystem is responsible for maintaining spacecraft orientation?",
+        "points": 4,
+        "choices": [
+          "Power System",
+          "Attitude Control System",
+          "Propulsion System",
+          "Communication System"
+        ],
+        "correctAnswer": "Attitude Control System"
+      },
+      {
+        "_id": "Q105-Q2",
+        "type": "true-false",
+        "question": "Solar panels are the only power source for spacecraft.",
+        "points": 2,
+        "choices": ["True", "False"],
+        "correctAnswer": "False"
+      }
+    ]
+  }
+]

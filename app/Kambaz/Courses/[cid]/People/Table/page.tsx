@@ -1,0 +1,86 @@
+"use client";
+
+import { Table } from "react-bootstrap";
+import { FaUserCircle } from "react-icons/fa";
+import { useState } from "react";
+import PeopleDetails from "../Details";
+
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  loginId: string;
+  section: string;
+  role: string;
+  lastActivity: string;
+  totalActivity: string;
+}
+
+interface PeopleTableProps {
+  users?: User[];
+  fetchUsers: () => void;
+}
+
+export default function PeopleTable({ users = [], fetchUsers }: PeopleTableProps) {
+  const [showDetails, setShowDetails] = useState(false);
+  const [showUserId, setShowUserId] = useState<string | null>(null);
+
+  return (
+    <div id="wd-people-table">
+      {showDetails && (
+        <PeopleDetails
+          uid={showUserId}
+          onClose={() => {
+            setShowDetails(false);
+            fetchUsers();
+          }}
+        />
+      )}
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Login ID</th>
+            <th>Section</th>
+            <th>Role</th>
+            <th>Last Activity</th>
+            <th>Total Activity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.length === 0 ? (
+            <tr>
+              <td colSpan={6} className="text-center">
+                No users enrolled in this course.
+              </td>
+            </tr>
+          ) : (
+            users.map((user: any) => (
+              <tr key={user._id}>
+                <td className="wd-full-name text-nowrap">
+                  <FaUserCircle className="me-2 fs-1 text-secondary" />
+                  <span
+                    className="wd-first-name text-decoration-none"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setShowDetails(true);
+                      setShowUserId(user._id);
+                    }}
+                  >
+                    {user.firstName}
+                  </span>{" "}
+                  <span className="wd-last-name">{user.lastName}</span>
+                </td>
+                <td className="wd-login-id">{user.loginId}</td>
+                <td className="wd-section">{user.section}</td>
+                <td className="wd-role">{user.role}</td>
+                <td className="wd-last-activity">{user.lastActivity}</td>
+                <td className="wd-total-activity">{user.totalActivity}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </Table>
+    </div>
+  );
+}

@@ -1,0 +1,65 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  courses: [],
+  assignments: [],
+};
+
+const coursesSlice = createSlice({
+  name: "courses",
+  initialState,
+  reducers: {
+    setCourses: (state, { payload: courses }) => {
+      state.courses = courses;
+    },
+    addNewCourse: (state, { payload: course }) => {
+      const newCourse = {
+        ...course,
+        _id: new Date().getTime().toString(),
+      };
+      state.courses = [...state.courses, newCourse] as any;
+    },
+    deleteCourse: (state, { payload: courseId }) => {
+      state.courses = state.courses.filter(
+        (course: any) => course._id !== courseId
+      );
+    },
+    updateCourse: (state, { payload: course }) => {
+      state.courses = state.courses.map((c: any) =>
+        c._id === course._id ? course : c
+      ) as any;
+    },
+    setAssignments: (state, { payload: assignments }) => {
+      state.assignments = assignments;
+    },
+    addAssignment: (state, { payload: assignment }) => {
+      const newAssignment = {
+        ...assignment,
+        _id: new Date().getTime().toString(),
+      };
+      state.assignments = [...state.assignments, newAssignment] as any;
+    },
+    deleteAssignment: (state, { payload: assignmentId }) => {
+      state.assignments = state.assignments.filter(
+        (assignment: any) => assignment._id !== assignmentId
+      );
+    },
+    updateAssignment: (state, { payload: assignment }) => {
+      state.assignments = state.assignments.map((a: any) =>
+        a._id === assignment._id ? assignment : a
+      ) as any;
+    },
+  },
+});
+
+export const { 
+  setCourses,
+  addNewCourse, 
+  deleteCourse, 
+  updateCourse,
+  setAssignments,
+  addAssignment,
+  deleteAssignment,
+  updateAssignment
+} = coursesSlice.actions;
+export default coursesSlice.reducer;
