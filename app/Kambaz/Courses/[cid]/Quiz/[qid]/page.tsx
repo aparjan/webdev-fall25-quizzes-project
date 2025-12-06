@@ -118,8 +118,16 @@ export default function QuizEditor() {
 
       <ul className="nav nav-tabs mb-3">
         <li className="nav-item">
-          <a className="nav-link active" href="#">
+          <Link 
+            href={`/Kambaz/Courses/${cid}/Quiz/${qid}/details`} 
+            className="nav-link"
+          >
             Details
+          </Link>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link active" href="#">
+            Edit
           </a>
         </li>
         <li className="nav-item">
