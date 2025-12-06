@@ -187,11 +187,7 @@ export default function Quiz() {
               <BsRocketTakeoff className="me-3 fs-4 text-success" />
               <div className="flex-grow-1">
                 <Link
-                  href={
-                    isFaculty
-                      ? `/Kambaz/Courses/${cid}/Quiz/${quiz._id}`
-                      : `/Kambaz/Courses/${cid}/Quiz/${quiz._id}/preview`
-                  }
+                  href={`/Kambaz/Courses/${cid}/Quiz/${quiz._id}/details`}
                   className="wd-quiz-link text-decoration-none text-dark fw-bold"
                 >
                   {quiz.title}
