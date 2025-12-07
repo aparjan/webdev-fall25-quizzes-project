@@ -70,6 +70,22 @@ export default function QuizDetails() {
 
       <hr />
 
+      {/* Tabs */}
+      <ul className="nav nav-tabs mb-4">
+        <li className="nav-item">
+          <a className="nav-link active" href="#">
+            Details
+          </a>
+        </li>
+        {isFaculty && (
+          <li className="nav-item">
+            <Link href={`/Kambaz/Courses/${cid}/Quiz/${qid}/questions`} className="nav-link">
+              Questions
+            </Link>
+          </li>
+        )}
+      </ul>
+
       {/* Quiz Title */}
       <h3 className="mb-4">{quiz.title}</h3>
 

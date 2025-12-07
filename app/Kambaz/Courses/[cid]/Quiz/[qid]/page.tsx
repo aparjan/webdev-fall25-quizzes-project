@@ -59,11 +59,28 @@ export default function QuizEditor() {
       if (isNewQuiz) {
         const newQuiz = await quizzesClient.createQuizForCourse(cid as string, quiz);
         dispatch(addQuiz(newQuiz));
+        router.push(`/Kambaz/Courses/${cid}/Quiz/${newQuiz._id}/details`);
       } else {
         const updatedQuiz = await quizzesClient.updateQuiz(quiz);
         dispatch(updateInStore(updatedQuiz));
+        router.push(`/Kambaz/Courses/${cid}/Quiz`);
       }
-      router.push(`/Kambaz/Courses/${cid}/Quiz`);
+    } catch (error) {
+      console.error("Error saving quiz:", error);
+    }
+  };
+
+  const handleSaveAndAddQuestions = async () => {
+    try {
+      if (isNewQuiz) {
+        const newQuiz = await quizzesClient.createQuizForCourse(cid as string, quiz);
+        dispatch(addQuiz(newQuiz));
+        router.push(`/Kambaz/Courses/${cid}/Quiz/${newQuiz._id}/questions`);
+      } else {
+        const updatedQuiz = await quizzesClient.updateQuiz(quiz);
+        dispatch(updateInStore(updatedQuiz));
+        router.push(`/Kambaz/Courses/${cid}/Quiz/${qid}/questions`);
+      }
     } catch (error) {
       console.error("Error saving quiz:", error);
     }
@@ -130,11 +147,13 @@ export default function QuizEditor() {
             Edit
           </a>
         </li>
-        <li className="nav-item">
-          <Link href={`/Kambaz/Courses/${cid}/Quiz/${qid}/questions`} className="nav-link">
-            Questions
-          </Link>
-        </li>
+        {!isNewQuiz && (
+          <li className="nav-item">
+            <Link href={`/Kambaz/Courses/${cid}/Quiz/${qid}/questions`} className="nav-link">
+              Questions
+            </Link>
+          </li>
+        )}
       </ul>
 
       <Form>
@@ -183,8 +202,28 @@ export default function QuizEditor() {
             <Form.Control
               type="number"
               value={quiz.points}
-              onChange={(e) => setQuiz({ ...quiz, points: parseInt(e.target.value) })}
+              onChange={(e) => {
+                const value = e.target.value;
+                setQuiz({ ...quiz, points: value === "" ? "" : parseInt(value) } as any);
+              }}
+              onBlur={(e) => {
+                if (e.target.value === "" || isNaN(parseInt(e.target.value))) {
+                  setQuiz({ ...quiz, points: 0 });
+                }
+              }}
+              style={{
+                MozAppearance: "textfield",
+                WebkitAppearance: "none",
+                appearance: "textfield"
+              }}
             />
+            <style jsx>{`
+              input[type="number"]::-webkit-inner-spin-button,
+              input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+              }
+            `}</style>
           </div>
         </div>
 
@@ -224,8 +263,28 @@ export default function QuizEditor() {
               <Form.Control
                 type="number"
                 value={quiz.timeLimit}
-                onChange={(e) => setQuiz({ ...quiz, timeLimit: parseInt(e.target.value) })}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setQuiz({ ...quiz, timeLimit: value === "" ? "" : parseInt(value) } as any);
+                }}
+                onBlur={(e) => {
+                  if (e.target.value === "" || isNaN(parseInt(e.target.value))) {
+                    setQuiz({ ...quiz, timeLimit: 20 });
+                  }
+                }}
+                style={{
+                  MozAppearance: "textfield",
+                  WebkitAppearance: "none",
+                  appearance: "textfield"
+                }}
               />
+              <style jsx>{`
+                input[type="number"]::-webkit-inner-spin-button,
+                input[type="number"]::-webkit-outer-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+                }
+              `}</style>
             </div>
           </div>
 
@@ -346,8 +405,11 @@ export default function QuizEditor() {
                 Cancel
               </Button>
             </Link>
-            <Button variant="danger" onClick={handleSave}>
+            <Button variant="danger" onClick={handleSave} className="me-2">
               Save
+            </Button>
+            <Button variant="primary" onClick={handleSaveAndAddQuestions}>
+              Save & Add Questions
             </Button>
           </div>
         </div>
