@@ -73,7 +73,7 @@ export default function AccountNavigation() {
       )}
       {currentUser && currentUser.role === "ADMIN" && (
         <Link
-          href="/Kambaz/Account/User"  // ← Change to singular
+          href="/Kambaz/Account/User" 
           className={`list-group-item list-group-item-action border-0 ${pathname.includes("/User") ? "active text-dark bg-white" : "text-danger bg-white"
             }`}
         >

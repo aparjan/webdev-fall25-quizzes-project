@@ -74,9 +74,14 @@ export default function Signin() {
           </Button>
         </Form>
 
-        <Link href="/Kambaz/Account/Signup" id="wd-signup-link">
-          Sign up
-        </Link>
+        <div className="d-flex justify-content-between align-items-center mt-3">
+          <Link href="/Kambaz/Account/Signup" id="wd-signup-link">
+            Sign up
+          </Link>
+          <Link href="/Kambaz/Team" className="text-info">
+            Team Details
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { setQuizzes, deleteQuiz as deleteFromStore, updateQuiz as updateInStore } from "./reducer";
+import { setQuizzes, deleteQuiz, publishQuiz, unpublishQuiz, addQuiz } from "./reducer";
 import * as quizzesClient from "./client";
 import { BsRocketTakeoff, BsPlus } from "react-icons/bs";
 import { IoEllipsisVertical, IoSearchSharp } from "react-icons/io5";
@@ -62,6 +62,7 @@ export default function Quiz() {
         shuffleAnswers: true,
         timeLimit: 20,
         multipleAttempts: false,
+        allowedAttempts: 1,
         showCorrectAnswers: false,
         accessCode: "",
         oneQuestionAtATime: true,
@@ -74,7 +75,7 @@ export default function Quiz() {
         questions: [],
       };
       const createdQuiz = await quizzesClient.createQuizForCourse(cid as string, newQuiz);
-      dispatch(setQuizzes([...quizzes, createdQuiz]));
+      dispatch(addQuiz(createdQuiz));
       router.push(`/Kambaz/Courses/${cid}/Quiz/${createdQuiz._id}`);
     } catch (error) {
       console.error("Error creating quiz:", error);
@@ -87,7 +88,7 @@ export default function Quiz() {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
       try {
         await quizzesClient.deleteQuiz(quizId);
-        dispatch(deleteFromStore(quizId));
+        dispatch(deleteQuiz(quizId));
       } catch (error) {
         console.error("Error deleting quiz:", error);
       }
@@ -100,10 +101,10 @@ export default function Quiz() {
     try {
       if (quiz.published) {
         await quizzesClient.unpublishQuiz(quiz._id);
-        dispatch(updateInStore({ ...quiz, published: false }));
+        dispatch(unpublishQuiz(quiz._id));
       } else {
         await quizzesClient.publishQuiz(quiz._id);
-        dispatch(updateInStore({ ...quiz, published: true }));
+        dispatch(publishQuiz(quiz._id));
       }
     } catch (error) {
       console.error("Error toggling publish status:", error);
@@ -116,7 +117,6 @@ export default function Quiz() {
       quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .filter((quiz: any) => {
-      // Students only see published quizzes
       if (isStudent) {
         return quiz.published;
       }
@@ -125,7 +125,6 @@ export default function Quiz() {
 
   return (
     <div id="wd-quizzes" className="p-3">
-      {/* Search and Action Buttons */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="input-group" style={{ maxWidth: "300px" }}>
           <span className="input-group-text bg-white">
@@ -151,9 +150,7 @@ export default function Quiz() {
         )}
       </div>
 
-      {/* Quiz List */}
       <ul className="list-group rounded-0">
-        {/* Assignment Quizzes Header */}
         <li className="list-group-item p-3 bg-secondary border">
           <div className="d-flex align-items-center">
             <div className="me-2">▼</div>
@@ -161,7 +158,6 @@ export default function Quiz() {
           </div>
         </li>
 
-        {/* Empty State */}
         {filteredQuizzes.length === 0 && (
           <li className="list-group-item p-4 text-center">
             <p className="text-muted mb-3">
@@ -180,7 +176,6 @@ export default function Quiz() {
           </li>
         )}
 
-        {/* Quiz Items - Dynamic */}
         {filteredQuizzes.map((quiz: any) => (
           <li key={quiz._id} className="list-group-item p-3">
             <div className="d-flex align-items-start">
@@ -200,16 +195,9 @@ export default function Quiz() {
                   <span>{quiz.points} pts</span>
                   {" | "}
                   <span>{quiz.questions?.length || 0} Questions</span>
-                  {isStudent && quiz.lastScore !== undefined && (
-                    <>
-                      {" | "}
-                      <span className="fw-bold">Score: {quiz.lastScore}/{quiz.points}</span>
-                    </>
-                  )}
                 </div>
               </div>
 
-              {/* Publish/Unpublish Icon */}
               {isFaculty && (
                 <div 
                   onClick={(e) => handlePublishToggle(quiz, e)}
@@ -225,7 +213,6 @@ export default function Quiz() {
                 </div>
               )}
 
-              {/* Context Menu (3 dots) */}
               {isFaculty && (
                 <Dropdown align="end">
                   <Dropdown.Toggle 

@@ -40,3 +40,19 @@ export const unpublishQuiz = async (quizId: string) => {
   const { data } = await axiosWithCredentials.put(`${QUIZZES_API}/${quizId}/unpublish`);
   return data;
 };
+
+// Quiz Attempts
+export const submitQuizAttempt = async (quizId: string, attempt: any) => {
+  const { data } = await axiosWithCredentials.post(`${QUIZZES_API}/${quizId}/attempts`, attempt);
+  return data;
+};
+
+export const getLatestAttempt = async (quizId: string) => {
+  const { data } = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}/attempts/latest`);
+  return data;
+};
+
+export const getAllAttempts = async (quizId: string) => {
+  const { data } = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}/attempts`);
+  return data;
+};

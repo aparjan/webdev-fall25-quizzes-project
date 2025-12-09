@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { updateQuiz as updateInStore } from "../../reducer";
+import { updateQuiz } from "../../reducer";
 import * as quizzesClient from "../../client";
 import { Button, Form, Modal } from "react-bootstrap";
 import { FaPlus, FaTrash, FaPencil } from "react-icons/fa6";
@@ -16,7 +16,7 @@ interface Question {
   points: number;
   choices: string[];
   correctAnswer: string;
-  correctAnswers?: string[]; // For fill-in-blank with multiple answers
+  correctAnswers?: string[];
 }
 
 export default function QuizQuestionsEditor() {
@@ -138,7 +138,7 @@ export default function QuizQuestionsEditor() {
         points: totalPoints,
       };
       await quizzesClient.updateQuiz(updatedQuiz);
-      dispatch(updateInStore(updatedQuiz));
+      dispatch(updateQuiz(updatedQuiz));
       alert("Questions saved successfully!");
     } catch (error) {
       console.error("Error saving questions:", error);
@@ -158,6 +158,9 @@ export default function QuizQuestionsEditor() {
       alert("Must have at least 2 choices");
       return;
     }
+    
+    dispatch(updateQuiz(updateQuiz));
+
     const newChoices = currentQuestion.choices.filter((_, i) => i !== index);
     setCurrentQuestion({
       ...currentQuestion,

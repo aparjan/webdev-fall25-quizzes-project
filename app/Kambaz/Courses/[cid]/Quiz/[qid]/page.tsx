@@ -3,7 +3,7 @@
 import { Button, Form } from "react-bootstrap";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { addQuiz, updateQuiz as updateInStore } from "../reducer";
+import { addQuiz, updateQuiz, publishQuiz, unpublishQuiz } from "../reducer";
 import * as quizzesClient from "../client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -30,6 +30,7 @@ export default function QuizEditor() {
     shuffleAnswers: true,
     timeLimit: 20,
     multipleAttempts: false,
+    allowedAttempts: 1,
     showCorrectAnswers: false,
     accessCode: "",
     oneQuestionAtATime: true,
@@ -62,7 +63,7 @@ export default function QuizEditor() {
         router.push(`/Kambaz/Courses/${cid}/Quiz/${newQuiz._id}/details`);
       } else {
         const updatedQuiz = await quizzesClient.updateQuiz(quiz);
-        dispatch(updateInStore(updatedQuiz));
+        dispatch(updateQuiz(updatedQuiz));
         router.push(`/Kambaz/Courses/${cid}/Quiz`);
       }
     } catch (error) {
@@ -78,7 +79,7 @@ export default function QuizEditor() {
         router.push(`/Kambaz/Courses/${cid}/Quiz/${newQuiz._id}/questions`);
       } else {
         const updatedQuiz = await quizzesClient.updateQuiz(quiz);
-        dispatch(updateInStore(updatedQuiz));
+        dispatch(updateQuiz(updatedQuiz));
         router.push(`/Kambaz/Courses/${cid}/Quiz/${qid}/questions`);
       }
     } catch (error) {
@@ -90,9 +91,8 @@ export default function QuizEditor() {
     try {
       if (!isNewQuiz) {
         await quizzesClient.publishQuiz(quiz._id);
-        const updatedQuiz = { ...quiz, published: true };
-        dispatch(updateInStore(updatedQuiz));
-        setQuiz(updatedQuiz);
+        dispatch(publishQuiz(quiz._id));
+        setQuiz({ ...quiz, published: true });
       }
     } catch (error) {
       console.error("Error publishing quiz:", error);
@@ -103,9 +103,8 @@ export default function QuizEditor() {
     try {
       if (!isNewQuiz) {
         await quizzesClient.unpublishQuiz(quiz._id);
-        const updatedQuiz = { ...quiz, published: false };
-        dispatch(updateInStore(updatedQuiz));
-        setQuiz(updatedQuiz);
+        dispatch(unpublishQuiz(quiz._id));
+        setQuiz({ ...quiz, published: false });
       }
     } catch (error) {
       console.error("Error unpublishing quiz:", error);
@@ -178,9 +177,7 @@ export default function QuizEditor() {
         </Form.Group>
 
         <div className="row mb-3">
-          <Form.Label column sm={2}>
-            Quiz Type
-          </Form.Label>
+          <Form.Label column sm={2}>Quiz Type</Form.Label>
           <div className="col-sm-10">
             <Form.Select
               value={quiz.quizType}
@@ -195,9 +192,7 @@ export default function QuizEditor() {
         </div>
 
         <div className="row mb-3">
-          <Form.Label column sm={2}>
-            Points
-          </Form.Label>
+          <Form.Label column sm={2}>Points</Form.Label>
           <div className="col-sm-10">
             <Form.Control
               type="number"
@@ -228,9 +223,7 @@ export default function QuizEditor() {
         </div>
 
         <div className="row mb-3">
-          <Form.Label column sm={2}>
-            Assignment Group
-          </Form.Label>
+          <Form.Label column sm={2}>Assignment Group</Form.Label>
           <div className="col-sm-10">
             <Form.Select
               value={quiz.assignmentGroup}
@@ -256,9 +249,7 @@ export default function QuizEditor() {
           />
 
           <div className="row mb-2">
-            <Form.Label column sm={3}>
-              Time Limit (minutes)
-            </Form.Label>
+            <Form.Label column sm={3}>Time Limit (minutes)</Form.Label>
             <div className="col-sm-9">
               <Form.Control
                 type="number"
@@ -296,6 +287,40 @@ export default function QuizEditor() {
             className="mb-2"
           />
 
+          {quiz.multipleAttempts && (
+            <div className="row mb-2">
+              <Form.Label column sm={3}>How Many Attempts</Form.Label>
+              <div className="col-sm-9">
+                <Form.Control
+                  type="number"
+                  min="1"
+                  value={quiz.allowedAttempts}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setQuiz({ ...quiz, allowedAttempts: value === "" ? "" : parseInt(value) } as any);
+                  }}
+                  onBlur={(e) => {
+                    if (e.target.value === "" || isNaN(parseInt(e.target.value))) {
+                      setQuiz({ ...quiz, allowedAttempts: 1 });
+                    }
+                  }}
+                  style={{
+                    MozAppearance: "textfield",
+                    WebkitAppearance: "none",
+                    appearance: "textfield"
+                  }}
+                />
+                <style jsx>{`
+                  input[type="number"]::-webkit-inner-spin-button,
+                  input[type="number"]::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                  }
+                `}</style>
+              </div>
+            </div>
+          )}
+
           <Form.Check
             type="checkbox"
             label="Show Correct Answers"
@@ -305,9 +330,7 @@ export default function QuizEditor() {
           />
 
           <div className="row mb-2">
-            <Form.Label column sm={3}>
-              Access Code
-            </Form.Label>
+            <Form.Label column sm={3}>Access Code</Form.Label>
             <div className="col-sm-9">
               <Form.Control
                 type="text"
@@ -380,19 +403,11 @@ export default function QuizEditor() {
             {!isNewQuiz && (
               <>
                 {quiz.published ? (
-                  <Button
-                    variant="warning"
-                    onClick={handleUnpublish}
-                    className="me-2"
-                  >
+                  <Button variant="warning" onClick={handleUnpublish} className="me-2">
                     Unpublish
                   </Button>
                 ) : (
-                  <Button
-                    variant="success"
-                    onClick={handlePublish}
-                    className="me-2"
-                  >
+                  <Button variant="success" onClick={handlePublish} className="me-2">
                     Publish
                   </Button>
                 )}
@@ -401,13 +416,9 @@ export default function QuizEditor() {
           </div>
           <div>
             <Link href={`/Kambaz/Courses/${cid}/Quiz`}>
-              <Button variant="secondary" className="me-2">
-                Cancel
-              </Button>
+              <Button variant="secondary" className="me-2">Cancel</Button>
             </Link>
-            <Button variant="danger" onClick={handleSave} className="me-2">
-              Save
-            </Button>
+            <Button variant="danger" onClick={handleSave} className="me-2">Save</Button>
             <Button variant="primary" onClick={handleSaveAndAddQuestions}>
               Save & Add Questions
             </Button>
